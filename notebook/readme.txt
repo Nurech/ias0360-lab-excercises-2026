@@ -19,6 +19,7 @@ reset.sh      run / bootsel / erase
 
 lab0/      first-time vm + course setup
 lab_1_1/   imu to sd
+lab_1_2/   filters on the pc, no pico needed yet
 
 plug into the data usb, not the lcd one.
 init the sd card before cyw43 or the led hangs.
