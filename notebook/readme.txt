@@ -20,7 +20,9 @@ reset.sh      run / bootsel / erase
 lab0/      first-time vm + course setup
 lab_1_1/   imu to sd
 lab_1_2/   filters on the pc, no pico needed yet
+lab_2_1/   3-layer occupancy dnn from scratch in numpy
 lab_2_2/   mnist cnn in tf_keras, sweep, own digits, saved model
+lab_2_3/   ptq vs qat int8 quantization of mnist cnn for tflite micro
 
 plug into the data usb, not the lcd one.
 init the sd card before cyw43 or the led hangs.
