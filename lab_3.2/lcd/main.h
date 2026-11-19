@@ -6,7 +6,10 @@
 
 #define DATA_SIZE RESULT_W*RESULT_H
 #define REQUEST_CHUNK_SIZE 2048
-#define REQUEST_ID "id_00002"
+#define REQUEST_ID "id_256780IAXD"
+
+// 2: MNIST POST, 3: chunked POST from memory, 4: chunked POST from the SD card
+#define LAB_STEP 4
 
 #define DATA_WRITE_COMPLETE_FLAG 0x1234ABCD
 
@@ -17,9 +20,15 @@
 #define EXIT_PROGRAM_FLAG 0xDEADDEAD
 
 
-// TODO: Set your Wi-Fi SSID and password here
+// Real values go in wifi_secrets.h next to this file (git ignores it):
+//   const char WIFI_SSID[] = "...";
+//   const char WIFI_PASSWORD[] = "...";
+#if __has_include("wifi_secrets.h")
+#include "wifi_secrets.h"
+#else
 const char WIFI_SSID[] = "your_wifi_ssid";
 const char WIFI_PASSWORD[] = "your_wifi_password";
+#endif
 
 const char SD_CARD_FILENAME[] = "large_request_data_test.bin";
 

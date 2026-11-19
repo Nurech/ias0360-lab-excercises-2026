@@ -8,7 +8,7 @@
 // declarations/constants here as the project grows.
 
 
-#define REQUEST_ID "YOUR_STUDENT_ID"
+#define REQUEST_ID "256780IAXD"
 #define NUM_CHARACTER 5
 #define STATIONARY_US 200000       // stationary prefix (0.2 s in the notebook)
 #define PREPARE_SECONDS 2          // hold-still countdown before every character

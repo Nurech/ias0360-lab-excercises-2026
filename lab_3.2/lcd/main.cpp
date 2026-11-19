@@ -86,7 +86,7 @@ int post_request_with_chunked_body(void) {
 
     // Send data in chunks
     size_t offset = 0;
-    int packet_index = 1;
+    int packet_index = 0;
     size_t total_packets_count = (DATA_SIZE + REQUEST_CHUNK_SIZE - 1) / REQUEST_CHUNK_SIZE;
 
     // Assume that you know the total size of data to send
@@ -371,13 +371,8 @@ int post_request_with_chunked_body_from_sd_card(void) {
         }
     }
 
-    // Destroy request object
-    printf("[Subscriber] Destroying HTTP request object...\n");
-    request.~HttpRequest();
-
-    // destroy core 1
+    // the request object is destroyed when it goes out of scope
     printf("[Subscriber] Destroying core 1...\n");
-    mutex_exit(&mutex);
     multicore_reset_core1();
 
     printf("[Subscriber] Exiting POST request function.\n");
@@ -391,20 +386,13 @@ int main(void)
         return -1;
     }
 
-    // Check WiFi POST request with MNIST data
-    return post_request_with_mnist_data(); // Send MINIST POST request
+    if (LAB_STEP == 2) return post_request_with_mnist_data();      // expected "8"
+    if (LAB_STEP == 3) return post_request_with_chunked_body();    // 6 packets from memory
 
+    // step 4: write the OCR image to the SD card on core 1, then send it back from there chunk by chunk
+    bool data_saved_in_sd_card = false;
+    if (!data_saved_in_sd_card) prior_post_request_with_chunked_body_from_sd_card();
+    post_request_with_chunked_body_from_sd_card();
 
-    // Check WiFi POST request with chunked body stored in memory
-    // return post_request_with_chunked_body(); // Send POST request with chunked body
-    
-
-    // Check WiFi POST request with chunked body stored in SD card
-    // Before sending the POST request, first write data to SD card
-
-    // Write text data to SD card
-    // return prior_post_request_with_chunked_body_from_sd_card();
-
-    // Then send POST request with chunked body read from SD card
-    // return post_request_with_chunked_body_from_sd_card(); 
+    while (1) tight_loop_contents();
 }

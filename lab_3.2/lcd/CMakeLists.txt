@@ -72,6 +72,8 @@ target_link_libraries(${PROGRAM_NAME}
     pico_multicore
 )
 
+# test.cpp is not in the repo; build the fifo test only when it is there
+if(EXISTS ${CMAKE_CURRENT_LIST_DIR}/test.cpp)
 add_executable(test_multicore_fifo
     test.cpp
 )
@@ -84,6 +86,7 @@ target_link_libraries(test_multicore_fifo
     FatFs_SPI
     sd_card_driver
 )
+endif()
 
                         
 # target_compile_options(main PRIVATE
@@ -102,7 +105,9 @@ pico_enable_stdio_uart(${PROGRAM_NAME} 0)
 
 pico_add_extra_outputs(${PROGRAM_NAME})
 
+if(TARGET test_multicore_fifo)
 pico_enable_stdio_usb(test_multicore_fifo 1)
 pico_enable_stdio_uart(test_multicore_fifo 0)
 
 pico_add_extra_outputs(test_multicore_fifo)
+endif()

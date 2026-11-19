@@ -15,9 +15,10 @@
 
 #include "request.hpp"
 #include "sd_card_wrapper.hpp"
+#include "position_csv.h"
 
 #define NUMBER_OF_CSV_FILES 3
-#define REQUEST_ID "YOUR_STUDENT_ID"
+#define REQUEST_ID "256780IAXD"
 
 static HttpRequest* http_request = nullptr;   // created after Wi-Fi is up
 static SD_CardWrapper sd_card(SD_CardWrapper::NoHalt{});
@@ -174,8 +175,22 @@ int post_request_with_chunked_body_from_sd_card(void) {
     return 0;
 }
 
-// TODO: 1. copy csv files located at tmp/ to SD card before posting request. 
-//       2. implement the function post_request_with_chunked_body_from_sd_card to read the CSV files from the SD card and send them as a chunked HTTP request.
+static_assert(sizeof POSITION_CSV / sizeof POSITION_CSV[0] == NUMBER_OF_CSV_FILES, "regenerate position_csv.h");
+
+// tmp/position_*.csv are built into the firmware (position_csv.h); put them on the SD card before the upload reads them
+int copy_csv_files_to_sd_card(void) {
+    for (uint8_t i = 0; i < NUMBER_OF_CSV_FILES; i++) {
+        char path[48];
+        snprintf(path, sizeof path, "position_%u.csv", i);
+        FRESULT fr;
+        if (!sd_card.writeFileAtomic(path, POSITION_CSV[i], strlen(POSITION_CSV[i]), &fr)) {
+            printf("[SD] Writing %s failed (%d)\n", path, fr);
+            return -1;
+        }
+        printf("[SD] %s: %u bytes\n", path, (unsigned)sd_card.getFileSize(path));
+    }
+    return 0;
+}
 
 int main(void)
 {
@@ -187,6 +202,11 @@ int main(void)
     FRESULT sd_result;
     if (!sd_card.mount(&sd_result)) {
         printf("SD card mount failed (%d)\n", sd_result);
+        return -1;
+    }
+
+    if (copy_csv_files_to_sd_card() != 0) {
+        printf("Copying the CSV files to the SD card failed\n");
         return -1;
     }
 
