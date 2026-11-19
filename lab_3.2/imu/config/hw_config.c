@@ -101,7 +101,7 @@ static sd_sdio_if_t sdio_ifs[] = {
         .D3_gpio_drive_strength = GPIO_DRIVE_STRENGTH_4MA,
         .SDIO_PIO = pio0,           // Use PIO0 (CYW43 uses PIO internally, but PIO0 is safer for SDIO)
         .DMA_IRQ_num = DMA_IRQ_1,   // Use DMA_IRQ_1 to avoid conflict with WiFi (which may use DMA_IRQ_0)
-        .baud_rate = 125 * 1000 * 1000 / 7
+        .baud_rate = 125 * 1000 * 1000 / 14  // ~9 MHz; /7 gave disk I/O errors next to Wi-Fi
     }
 };
 

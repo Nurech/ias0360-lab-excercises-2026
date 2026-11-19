@@ -44,7 +44,7 @@ int init_wifi_connection(void) {
 
     // Connect to the WiFI network - loop until connected
     printf("Start connecting wifi.\n");
-    while(cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000) != 0) {
+    while(cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, WIFI_PASSWORD[0] ? CYW43_AUTH_WPA2_AES_PSK : CYW43_AUTH_OPEN, 30000) != 0) {
         printf("Attempting to connect...\n");
     }
     // Print a success message once connected
