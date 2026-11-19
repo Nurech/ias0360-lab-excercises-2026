@@ -17,8 +17,11 @@ for f in "$B/application1.uf2" "$B/application2.bin"; do
     fi
 done
 
+# into bootsel once and load both there; a second "load -f" can hit the board while it is still rebooting
+"$PICO" reboot -f -u || true
+sleep 3
 echo ">> app1 -> 0x10000000"
-"$PICO" load "$B/application1.uf2" -f
+"$PICO" load "$B/application1.uf2"
 echo ">> app2 -> $APP2_ADDR"
 "$PICO" load "$B/application2.bin" --offset "$APP2_ADDR"
 "$PICO" reboot
