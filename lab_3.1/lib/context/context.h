@@ -2,8 +2,8 @@
 #define CONTEXT_H
 
 #define CONTEXT_SWITCHER_OFFSET 0x100u
-#define APP1_OFFSET xxxx // Define the offset for Application 1
-#define APP2_OFFSET yyyy // Define the offset for Application 2
+#define APP1_OFFSET 0x100u    // vector table of app1, right after its 256 B boot2
+#define APP2_OFFSET 0x140000u // 1.25 MB, well above the size of app1, 4 KB aligned
 
 #ifdef __cplusplus
 extern "C" {
