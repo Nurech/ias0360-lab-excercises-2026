@@ -81,7 +81,7 @@ int post_request_with_mnist_data(void) {
 // Send a POST request with chunked body
 int post_request_with_chunked_body(void) {
 
-    const char* post_url = "/api/v1/test_large_request";
+    const char* post_url = "/api/v1/ocr_chunked";
     HttpRequest request(post_url);
 
     // Send data in chunks
@@ -306,7 +306,7 @@ int post_request_with_chunked_body_from_sd_card(void) {
     mutex_init(&mutex);  // Initialize the mutex
     
     // Set URL
-    const char* post_url = "/api/v1/test_large_request";
+    const char* post_url = "/api/v1/ocr_chunked";
     HttpRequest request(post_url);
     printf("[Subscriber] HTTP request object created.\n");
 
