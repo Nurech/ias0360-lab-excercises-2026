@@ -192,22 +192,27 @@ int copy_csv_files_to_sd_card(void) {
     return 0;
 }
 
+// returning from main leaves usb dead, so picotool cannot reboot the board; park in a sleep loop instead
+static int park(void) {
+    while (true) sleep_ms(1000);
+}
+
 int main(void)
 {
     if (init_wifi_connection() != 0) {
         printf("Wi-Fi connection failed\n");
-        return -1;
+        return park();
     }
 
     FRESULT sd_result;
     if (!sd_card.mount(&sd_result)) {
         printf("SD card mount failed (%d)\n", sd_result);
-        return -1;
+        return park();
     }
 
     if (copy_csv_files_to_sd_card() != 0) {
         printf("Copying the CSV files to the SD card failed\n");
-        return -1;
+        return park();
     }
 
     HttpRequest request(URL_REQUEST, HOST, PORT);
@@ -215,8 +220,9 @@ int main(void)
 
     if (post_request_with_chunked_body_from_sd_card() != 0) {
         printf("Failed to post request with chunked body from SD card\n");
-        return -1;
+        return park();
     }
 
-    return 0;
+    printf("Done.\n");
+    return park();
 }
